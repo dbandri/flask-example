@@ -1,7 +1,49 @@
 
-<form action="/add_contact" method="POST">
+{% extends 'layout.html' %}
+{% block body %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+	<div class="alert alert-warning alert-dismissible" role="alert">
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	  	<span aria-hidden="true">&times;</span>
+	  </button>
+	  <strong> {{ message }} </strong>
+	</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<form action="/create" method="POST">
 	<input type="text" name="name" placeholder="full name">
 	<input type="text" name="phone" placeholder="number phone">
 	<input type="text" name="email" placeholder="email address">
 	<button type="submit"> save </button>
 </form>
+
+<table>
+	<thead>
+		<tr>
+			<td> Fullname </td>
+			<td> Phone </td>
+			<td> Email </td>
+			<td> Actiones </td>
+		</tr>
+	</thead>
+	<tbody>
+		{% for contact in contacts %}
+			<tr>
+				<td> {{ contact.1 }} </td>
+				<td> {{ contact.2 }} </td>
+				<td> {{ contact.3 }} </td>
+				<td>
+					<a href="/edit/{{contact.0}}">Edit</a>
+					<a href="/delete/{{contact.0}}">Delete</a>
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}

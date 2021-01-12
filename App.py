@@ -1,37 +1,76 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysqldb import MySQL
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
+
+
+# MySQL connection
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '123456'
-app.config['MYSQL_DB'] = 'flaskcontact'
+app.config['MYSQL_DB'] = 'flaskcontacts'
 mysql = MySQL(app)
+
+
+# Settings
+app.secret_key = 'my secret key'
+
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM contacts ORDER BY fullname ASC')
+    data = cur.fetchall()
+    return render_template('index.html', contacts = data)
 
-@app.route('/add_contact', methods=['POST'])
+
+@app.route('/create', methods = ['POST'])
 def add_contact():
     if request.method == 'POST':
-    	name = request.form['name']
-    	phone = request.form['phone']
-    	email = request.form['email']
-    	cur = mysql.connection.cursor()
-    	cur.execute('INSERT INTO contacts(fullname,phone,email) VALUES (%s,%s,%s)',
-    		(name,phone,email))
-    	mysql.connection.commit()
-    	return redirect(url_for('index'))
+        name = request.form['name']
+        phone = request.form['phone']
+        email = request.form['email']
+        cur = mysql.connection.cursor()
+        cur.execute('INSERT INTO contacts(fullname,phone,email) VALUES (%s,%s,%s)',(name,phone,email))
+        mysql.connection.commit()
+        flash('contact added successfully')
+        return redirect(url_for('index'))
 
-@app.route('/edit')
-def edit_contact():
-    return 'edit contact'
 
-@app.route('/delete')
-def delete_contact():
-    return 'delete contact'
+@app.route('/edit/<id>')
+def get_contact(id):
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM contacts WHERE id = %s',(id))
+    data = cur.fetchone()
+    return render_template('edit.html', contact = data)
+
+
+@app.route('/update/<id>', methods = ['POST'])
+def update_contact(id):
+    if request.method == 'POST':
+        name = request.form['name']
+        phone = request.form['phone']
+        email = request.form['email']
+    cur = mysql.connection.cursor()
+    cur.execute('''UPDATE contacts 
+        SET fullname = %s,phone = %s,email = %s
+        WHERE id = %s''',(name,phone,email,id))
+    mysql.connection.commit()
+    flash('contact updated successfully')
+    return redirect(url_for('index'))
+
+
+@app.route('/delete/<string:id>')
+def delete_contact(id):
+    cur = mysql.connection.cursor()
+    cur.execute('DELETE FROM contacts WHERE id = {0}'.format(id))
+    mysql.connection.commit()
+    flash('contact removed successfully')
+    return redirect(url_for('index'))
+
+
+Bootstrap(app)
 
 if __name__ == '__main__':
-    app.run(port = 3000,debug = True)
-
+    app.run(port=3000, debug=True)

@@ -1,9 +1,19 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysqldb import MySQL
-from flask_bootstrap import Bootstrap
+from flask_wtf import CsrfProtect
+#from flask_bootstrap import Bootstrap
+from config import devConfig
 
 app = Flask(__name__)
 
+# Settings
+app.config.from_object(devConfig)
+
+# Token
+csrf = CsrfProtect()
+
+# Bootstrap 3
+#Bootstrap(app)
 
 # MySQL connection
 app.config['MYSQL_HOST'] = 'localhost'
@@ -11,10 +21,6 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '123456'
 app.config['MYSQL_DB'] = 'flaskcontacts'
 mysql = MySQL(app)
-
-
-# Settings
-app.secret_key = 'my secret key'
 
 
 @app.route('/')
@@ -70,7 +76,7 @@ def delete_contact(id):
     return redirect(url_for('index'))
 
 
-Bootstrap(app)
-
 if __name__ == '__main__':
-    app.run(port=3000, debug=True)
+    csrf.init_app(app)
+
+    app.run(port=3000)

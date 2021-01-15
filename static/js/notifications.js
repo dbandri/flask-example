@@ -1,7 +1,7 @@
 
 $("document").ready(function(){
     setTimeout(function(){
-        $("div.alert-dismissible").remove();
+        $("div[role=alert]").remove();
     }, 7000 ); 
 });
 

@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysqldb import MySQL
 from flask_wtf import CsrfProtect
-#from flask_bootstrap import Bootstrap
 from config import devConfig
 
 app = Flask(__name__)
@@ -11,9 +10,6 @@ app.config.from_object(devConfig)
 
 # Token
 csrf = CsrfProtect()
-
-# Bootstrap 3
-#Bootstrap(app)
 
 # MySQL connection
 app.config['MYSQL_HOST'] = 'localhost'
@@ -28,6 +24,7 @@ def index():
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM contacts ORDER BY fullname ASC')
     data = cur.fetchall()
+    print(data)
     return render_template('index.html', contacts = data)
 
 

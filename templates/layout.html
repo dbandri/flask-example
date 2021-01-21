@@ -20,18 +20,19 @@
 </head>
 <body>
 
-	<!-- Image and text -->
-	<nav class="navbar navbar-light bg-dark justify-content-center">
-	  	<a class="navbar-brand text-white" href="/">
-	    	<!--img src="{{url_for('static',filename='img/logo-flask.svg')}}" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy"-->
-	    	Contacts App
-	  	</a>
-	</nav>
+	<!-- header -->
+	<header>
+		{% block header %} {% endblock %}
+	</header>
 
+	<!-- container -->
 	<div class="container">
-		{% block body %}
-		{% endblock %}
+		{% block body %} {% endblock %}
 	</div>
 
+	<!-- footer -->
+	<footer>
+		{% block footer %} {% endblock %}
+	</footer>
 </body>
 </html>

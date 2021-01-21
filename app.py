@@ -41,7 +41,7 @@ def add_contact():
         return redirect(url_for('index'))
 
 
-@app.route('/edit/<id>')
+@app.route('/edit/<int:id>')
 def get_contact(id):
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM contacts WHERE id = %s',(id))

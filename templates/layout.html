@@ -22,17 +22,26 @@
 
 	<!-- header -->
 	<header>
-		{% block header %} {% endblock %}
+		<nav class="navbar navbar-light bg-dark justify-content-center">
+			<a class="navbar-brand text-white" href="/">
+				<!--img src="{{url_for('static',filename='img/logo-flask.svg')}}" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy"-->
+				Contacts App
+			</a>
+		</nav>
 	</header>
 
 	<!-- container -->
 	<div class="container">
-		{% block body %} {% endblock %}
+		{% block content %} {% endblock %}
 	</div>
 
 	<!-- footer -->
 	<footer>
-		{% block footer %} {% endblock %}
+		<div class="bg-dark text-center h-1">
+			<p class="copyright text-muted mb-0">
+				&copy; Curso Flask 2016
+			</p>
+		</div>
 	</footer>
 </body>
 </html>

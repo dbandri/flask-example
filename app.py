@@ -24,7 +24,6 @@ def index():
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM contacts ORDER BY fullname ASC')
     data = cur.fetchall()
-    print(data)
     return render_template('index.html', contacts = data)
 
 
@@ -41,10 +40,10 @@ def add_contact():
         return redirect(url_for('index'))
 
 
-@app.route('/edit/<int:id>')
+@app.route('/edit/<id>')
 def get_contact(id):
     cur = mysql.connection.cursor()
-    cur.execute('SELECT * FROM contacts WHERE id = %s',(id))
+    cur.execute('SELECT * FROM contacts WHERE id = %s',[id])
     data = cur.fetchone()
     return render_template('edit.html', contact = data)
 

@@ -1,3 +1,4 @@
+import os
 
 class Config(object):
 	DEBUG = False
@@ -5,12 +6,13 @@ class Config(object):
 
 class proConfig(Config):
 	ENV = 'production'
-	DB_SERVER = '190.73.11.131'
+	DEBUG = False
 		
 class devConfig(Config):
 	ENV = 'development'
 	DEBUG = True
 
 class testConfig(Config):
+	DEBUG = True
 	TESTING = True
 		

@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysqldb import MySQL
 from flask_wtf import CsrfProtect
 from config import devConfig
+import forms
 
 app = Flask(__name__)
 
@@ -22,14 +23,15 @@ mysql = MySQL(app)
 @app.route('/')
 @app.route('/<id>',methods = ['GET'])
 def index(id = None):
-    edit = None
+    contact_form = forms.contactForm()
+    info = None
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM contacts ORDER BY fullname ASC')
     data = cur.fetchall()
     if id != None:
         cur.execute('SELECT * FROM contacts WHERE id = %s',[id])
-        edit = cur.fetchone()
-    return render_template('table.html', contacts = data, edit = edit)
+        info = cur.fetchone()
+    return render_template('index.html', contacts = data, info = info, form = contact_form)
 
 
 @app.route('/create', methods = ['POST'])

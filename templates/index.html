@@ -14,55 +14,37 @@
 			{% endwith %}
 
 			<div class="card card-body mb-3" id="tc">
+			{% if edit %}
+				<form action="/update/{{edit.0}}" method="POST">
+			{% else %}
 				<form action="/create" method="POST">
+			{% endif %}
 					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-					<input type="text" name="name" placeholder="fullname" class="form-control mb-2">
-					<input type="tel" name="phone" placeholder="4444-4444444" class="form-control mb-2">
-					<input type="email" name="email" placeholder="name@example.com" class="form-control mb-2">
+					<input type="text" name="name" placeholder="fullname" value="{{edit.1}}" class="form-control mb-2">
+					<input type="tel" name="phone" placeholder="4444-4444444" value="{{edit.2}}" class="form-control mb-2">
+					<input type="email" name="email" placeholder="name@example.com" value="{{edit.3}}" class="form-control mb-2">
 					<div class="d-flex">
+						{% if edit %}
+						<div class="col-6 pe-1 d-grid">
+							<button type="submit" class="btn btn-primary btn-sm"> update </button>	
+						</div>
+						<div class="col-6 ps-1 d-grid">
+							<a href="/" class="btn btn-danger btn-sm" role="button"> cancelar </a>
+						</div>
+						{% else %}
 						<div class="col-6 pe-1 d-grid">
 							<button type="submit" class="btn btn-primary btn-sm"> save </button>	
 						</div>
 						<div class="col-6 ps-1 d-grid">
 							<input type="reset" class="btn btn-danger btn-sm" value="clear" role="button">
 						</div>
+						{% endif %}
 					</div>
 				</form>
 			</div>
 		</div>
 		<div class="table-responsive-lg">
-			<table class="table table-bordered table-sm align-middle">
-				<caption>List of contacts</caption>
-				<thead class="table-dark text-center">
-					<tr>
-						<th scope="col"> Fullname </th>
-						<th scope="col"> Phone </th>
-						<th scope="col"> Email </th>
-						<th scope="col"> Actiones </th>
-					</tr>
-				</thead>
-				<tbody>
-					{% if contacts %}
-					{% for contact in contacts %}
-						<tr>
-							<td> {{ contact.1 }} </td>
-							<td> {{ contact.2 }} </td>
-							<td> {{ contact.3 }} </td>
-							<td class="text-center">
-								<a href="/edit/{{contact.0}}" class="btn btn-primary btn-sm py-1">Edit</a>
-								<a href="javascript:remove({{contact.0}})" class="btn btn-danger btn-sm py-1">Delete</a>
-							</td>
-						</tr>
-					{% endfor %}
-					{% else %}
-						<tr>
-							<td colspan="4">
-						  		<div class="alert alert-info p-2 m-1"> No registered contacts </div>
-							</td>
-						</tr>
-					{% endif %}
-				</tbody>
-			</table>
+			{% block table %} {% endblock %}
 		</div>
 	</div>
 </div>

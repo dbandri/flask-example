@@ -20,11 +20,16 @@ mysql = MySQL(app)
 
 
 @app.route('/')
-def index():
+@app.route('/<id>',methods = ['GET'])
+def index(id = None):
+    edit = None
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM contacts ORDER BY fullname ASC')
     data = cur.fetchall()
-    return render_template('index.html', contacts = data)
+    if id != None:
+        cur.execute('SELECT * FROM contacts WHERE id = %s',[id])
+        edit = cur.fetchone()
+    return render_template('table.html', contacts = data, edit = edit)
 
 
 @app.route('/create', methods = ['POST'])

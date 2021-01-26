@@ -15,9 +15,14 @@
 
 			<div class="card card-body mb-3">
 				{% from '_macro.html' import render_field %}
-				<form action="">
+				{% if info %}
+				<form action="/update/{{info.0}}" method="POST">
+				{% else %}
+				<form action="/create" method="POST">
+				{% endif %}
+					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 					{{ render_field(form.fullname, class='form-control mb-2', placeholder='fullname', value=info.1) }}
-					{{ render_field(form.phone, class='form-control mb-2', placeholder='4444-4444444', value=info.2) }}
+					{{ render_field(form.phone, class='form-control mb-2', placeholder='4444-4444444', value=info.2, pattern='[0-9]{4}[-][0-9]{7}') }}
 					{{ render_field(form.email, class='form-control mb-2', placeholder='example@example.xxx', value=info.3) }}
 					<div class="d-flex">
 						{% if info %}

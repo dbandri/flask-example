@@ -37,7 +37,7 @@ def index(id = None):
 @app.route('/create', methods = ['POST'])
 def add_contact():
     if request.method == 'POST':
-        name = request.form['name']
+        name = request.form['fullname']
         phone = request.form['phone']
         email = request.form['email']
         cur = mysql.connection.cursor()
@@ -58,7 +58,7 @@ def get_contact(id):
 @app.route('/update/<id>', methods = ['POST'])
 def update_contact(id):
     if request.method == 'POST':
-        name = request.form['name']
+        name = request.form['fullname']
         phone = request.form['phone']
         email = request.form['email']
     cur = mysql.connection.cursor()
